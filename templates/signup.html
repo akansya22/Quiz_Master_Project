@@ -9,8 +9,8 @@
     <div class="my_container">
         <div class="center"><h1>Quiz Master</h1></div>
         <div class="my_panel">
-            <div class="center"><h3> Login </h3></div>
-            <form action="/login" method="POST">
+            <div class="center"><h3> Signup </h3></div>
+            <form action="/register" method="POST">
             <div class="input_form">
                 <div class="mb-3">
                     <label for="user_name" class="form-label">User Name(E-Mail)</label>
@@ -18,7 +18,6 @@
                 </div>
                 <div class="mb-3" style="position: relative;">
                     <label for="password" class="form-label">Password</label>
-                    <!-- Wrap the input and button -->
                     <div style="position: relative;">
                         <input 
                             type="password" 
@@ -36,17 +35,28 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    New user ? <a href ="/register">Signup</a>
-                    <div class="msg_container">
-                        <div class="err_msg">{{msg1}}</div>
-                        <div class="pass_msg">{{msg2}}</div>
-                    </div>                    
+                    <label for="full_name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="full_name" id="full_name" placeholder="ex.-->  Dexter">
+                </div>
+                <div class="mb-3">
+                    <label for="qualification" class="form-label">Qualification</label>
+                    <input type="text" class="form-control" name="qualification" id="qualification" placeholder="ex.--> B.Sc. Data Science">
+                </div>
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob" id="dob">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    Existing User ? <a href="/login">Login</a>
                 </div>
             </div>
             </form>
+            <div class="msg_container">
+                <div class="err_msg">{{msg}}</div>
+            </div>
         </div>
     </div>
-    <script src="/static/js/script.js"></script>  
+    <script src="/static/js/script.js"></script>
 </body>
 </html>

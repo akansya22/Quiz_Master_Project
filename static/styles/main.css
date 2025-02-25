@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.my_container {
+    border: 2px solid black;
+    padding: 20px;
+}
+
+.my_panel {
+    width: 80%;
+    margin: auto;
+    height: auto;
+    border: 1px dashed black;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.center {
+    text-align: center;
+    color: rgb(13, 3, 98);
+    margin-bottom: 15px;
+}
+
+.input_form {
+    border: 1px solid blue;
+    width: 600px;
+    height: auto;
+    margin: auto;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #f9f9f9;
+}
+
+.outer_box {
+    border: 1px solid rgb(138, 127, 4);
+    margin-top: 20px;
+    margin: auto;
+    padding: 10px;
+    width: 80%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.nav_bar {
+    font-size: larger;
+    margin-left: 20px;
+    font-style: italic;
+    font-style: oblique;
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.err_msg {
+    text-align: center;
+    margin: auto;
+    color: rgb(255, 9, 9);
+}
+
+.pass_msg {
+    text-align: center;
+    margin: auto;
+    color: rgb(9, 143, 36);
+}
+
+a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.navbar-nav li span {
+    margin: 0 10px;  /* Adds space around the separator */
+    color: #fff;     /* Change color to match your theme */
+}
+
+/* Adding a border to the right of each <th> except the last one */
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th.border-separator {
+    border-right: 2px solid #000; /* Adds a vertical line between columns */
+}
+
+th:last-child, td:last-child {
+    border-right: none; /* Removes the border for the last column */
+}

@@ -14,5 +14,7 @@ def setup_app():
 
 setup_app()
 
+from backend.controllers import *
+
 if __name__ == "__main__":
     app.run(debug=True)

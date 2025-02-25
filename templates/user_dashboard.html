@@ -1,0 +1,36 @@
+{% extends "user_layout.html" %}  <!-- Inherited all nav features -->
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center"> <!-- Center the column -->
+            <div class="col-md-8">
+                <!-- Card container with rounded corners -->
+                <div class="card rounded-panel">
+                    <div class="card-body">
+                        <!-- Bold and centered title for Upcoming Quizzes -->
+                        <h5 class="card-title text-center font-weight-bold">Upcoming Quizzes</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="border-separator">ID</th>
+                                    <th class="border-separator">No. of Questions</th>
+                                    <th class="border-separator">Date</th>
+                                    <th>Duration (HH:MM)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>10</td>
+                                    <td>22/02/2025</td>
+                                    <td>01:30</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1 class="center">No Quizzes are available</h1> <!-- Centered message -->
+    </div>
+{% endblock %}

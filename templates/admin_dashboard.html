@@ -1,0 +1,42 @@
+{%extends "admin_layout.html"%}  <!--Inherited all nav features-->
+{%block content%}
+                <div class="container">
+                    <!-- Display the message if it exists-->
+                    {% if msg %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ msg }}
+                    </div>
+                    {% endif %}
+
+                    {%if subjects%}
+                    <div class="row">
+                      {%for subject in subjects%}
+                      <div class="col">
+                        <!-- subject 1 card here -->
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h5 class="card-title"><a href="#">{{subject.name}}</a></h5>
+                              
+                              {%if subject.chapters%}
+                                <table>
+                                  <tr><th>ID</th><th>Title</th><th>Chapter_No.</th></tr>
+                                {%for chapter in subject.chapters%}
+                                  <tr><td><a href="#">{{chapter.id}}</a></td><td>{{chapter.name}}</td><td>{{chapter.chapter_no}}</td></tr>
+                                {%endfor%}
+                                </table>
+                              {%else%}
+                                <p>No Quiz for this Chapter</p>
+                              {%endif%}
+                              <a href="#" type="button" class="btn btn-outline-primary">+Add Chapter</a>
+                            </div>
+                        </div>
+                        <!-- End of Subject -->
+                      </div>
+                      {%endfor%}
+                    </div>
+                    {%else%}
+                      <h1 class="center">No Quizzes are available</h1>
+                    {%endif%}
+                </div>
+                <div class="center"><a href="#" type="button" class="btn btn-primary">+Add Subject</a></div>
+{%endblock%}       
