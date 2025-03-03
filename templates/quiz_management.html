@@ -1,0 +1,58 @@
+<!-- quiz_management.html -->
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-center my-3">
+        <h3>Quiz Management</h3>
+    </div>
+
+    <div class="row g-3"> <!-- Grid layout for quiz boxes -->
+        {% for quiz in quizzes %}
+        <div class="col-lg-4 col-md-6 col-sm-12"> <!-- Responsive column sizing -->
+            <div class="card shadow-sm h-100">
+                <div class="card-header">
+                    <h5>
+                        <a href="/edit_quiz/{{ quiz.id }}/{{ name }}">
+                            Quiz {{ loop.index }} ({{ quiz.quiz_title }})
+                        </a>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Q title</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for question in quiz.questions %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>MCQ</td>
+                                <td>
+                                    <a href="/edit_question/{{ question.id }}/{{ name }}" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/delete_question/{{ question.id }}/{{ name }}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-4">
+                        <a href="/add_question/{{ quiz.id }}/{{ name }}" class="btn btn-success">Add Question</a>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add New Quiz Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('add_quiz',name=name) }}" class="btn btn-success">Add New Quiz</a>
+    </div>
+</div>
+{% endblock %}

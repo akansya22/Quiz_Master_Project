@@ -1,0 +1,11 @@
+@app.route("/edit_chapter/<id>/<name>", methods=["GET", "POST"])
+    def edit_chapter(id, name):
+        c = get_chapter(id)  # Fetch the chapter from the database based on the ID
+        if request.method=="POST":
+            title=request.form.get("title")
+            chapter_no=request.form.get("chapter_no")
+            c.title=title
+            c.chapter_no=chapter_no
+            db.session.commit()        
+            return redirect(url_for("admin_dashboard",name=name))
+        return render_template("edit_chapter.html",chapter=c,name=name)

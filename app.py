@@ -1,5 +1,5 @@
 from flask import Flask
-from backend.models import db
+from backend.models import *
 
 
 app = None
@@ -12,6 +12,7 @@ def setup_app():
     app.app_context().push()
     print("Congrats, Your Server is Started....")
 
+    
 setup_app()
 
 from backend.controllers import *

@@ -1,0 +1,52 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+    <div class="center"><h3>Edit Quiz</h3></div>
+    <form action="/edit_quiz/{{ quiz.id }}/{{ name }}" method="POST">
+        <!-- Chapter Selection -->
+        <div class="mb-3">
+            <label for="chapter_id" class="form-label">Select Chapter</label>
+            <select class="form-control" name="chapter_id" id="chapter_id" required>
+                <option value="" disabled>Select a Chapter</option>
+                {% for chapter in chapters %}
+                    <option value="{{ chapter.id }}" {% if chapter.id == quiz.chapter_id %}selected{% endif %}>
+                        {{ chapter.chapter_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Auto-filled Chapter Name and Chapter ID -->
+        <div class="mb-3">
+            <label for="chapter_name" class="form-label">Chapter Name</label>
+            <input type="text" class="form-control" name="chapter_name" id="chapter_name" value="{{ quiz.chapter_name }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="chapter_id_input" class="form-label">Chapter ID</label>
+            <input type="number" class="form-control" name="chapter_id_input" id="chapter_id_input" value="{{ quiz.chapter_id }}" readonly>
+        </div>
+
+        <!-- Editable Quiz Details -->
+        <div class="mb-3">
+            <label for="quiz_title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" name="quiz_title" id="quiz_title" value="{{ quiz.quiz_title }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input type="time" class="form-control" name="duration" id="duration" value="{{ quiz.duration }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="date_of_quiz" class="form-label">Date of Quiz</label>
+            <input type="date" class="form-control" name="date_of_quiz" id="date_of_quiz" value="{{ quiz.date_of_quiz }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="total_questions" class="form-label">Total Questions</label>
+            <input type="number" class="form-control" name="total_questions" id="total_questions" value="{{ quiz.total_questions }}" required>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="/delete_quiz/{{ quiz.id }}/{{ name }}" type="button" class="btn btn-danger">Delete</a>
+            <a href="/quiz_management/{{ name }}" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

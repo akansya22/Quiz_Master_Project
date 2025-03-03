@@ -1,8 +1,8 @@
 ##------ Data models------##
 
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date, time, datetime
-from sqlalchemy.sql import func
+from sqlalchemy import func
+
 
 
 db = SQLAlchemy()
@@ -28,7 +28,7 @@ class User_Info(db.Model):
 class Subject(db.Model):
     __tablename__="subject"
     id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String,nullable=False)
+    subject_name=db.Column(db.String,nullable=False)
     code=db.Column(db.String,nullable=False,unique=True)
     credit=db.Column(db.Integer,nullable=False)
     description=db.Column(db.String,nullable=False)
@@ -43,7 +43,7 @@ class Chapter(db.Model):
     __tablename__="chapter"
     id=db.Column(db.Integer,primary_key=True)
     subject_id=db.Column(db.Integer,db.ForeignKey("subject.id"),nullable=False)
-    title=db.Column(db.String,nullable=False)
+    chapter_name=db.Column(db.String,nullable=False)
     chapter_no=db.Column(db.Integer,nullable=False)
     
     quizzes=db.relationship("Quiz",cascade="all,delete",backref="chapter",lazy="select")
@@ -56,6 +56,8 @@ class Quiz(db.Model):
     __tablename__="quiz"
     id=db.Column(db.Integer,primary_key=True)
     chapter_id=db.Column(db.Integer,db.ForeignKey("chapter.id"),nullable=False)
+    chapter_name=db.Column(db.String,nullable=False)
+    quiz_title=db.Column(db.String,nullable=False)
     duration=db.Column(db.Integer,nullable=False)
     date_of_quiz=db.Column(db.Date,nullable=False)
     total_questions=db.Column(db.Integer,nullable=False)
