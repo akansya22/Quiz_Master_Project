@@ -1,3 +1,5 @@
+
+
 * {
     margin: 0;
     padding: 0;
@@ -51,13 +53,13 @@
     font-size: larger;
     margin-left: 20px;
     font-style: italic;
-    font-style: oblique;
-    background: #007bff;
-    color: white;
+    color: #333; /* Dark text for contrast */
     padding: 10px;
     border-radius: 5px;
     text-align: center;
+    font-weight: bold;
 }
+
 
 .err_msg {
     text-align: center;
@@ -97,4 +99,31 @@ th.border-separator {
 
 th:last-child, td:last-child {
     border-right: none; /* Removes the border for the last column */
+}
+
+.main-heading {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #dd3636, #083b8f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.internal-heading {
+    font-family: 'Pacifico', cursive; /* Handwritten cursive */
+    font-size: 2rem; /* Reduced height */
+    font-weight: bold;
+    line-height: 1; /* Decreases space between lines */
+
+    /* Color options (Pick One) */
+    color: #ff9800; /* Solid Orange */
+    
+    /* OR Gradient Text */
+    background: linear-gradient(to right, #ff9800, #ff3d00); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Softer shadow */
 }

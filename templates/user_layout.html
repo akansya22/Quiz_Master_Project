@@ -9,31 +9,37 @@
         <div class="my_container">
             <div class="center"><h1>Quiz Master</h1></div>
             <div class="my_panel">
-                <nav class="navbar navbar-expand-lg navbar-light" style="background-image: linear-gradient(to right, rgb(221, 54, 54),rgb(109, 66, 226));">
+                <nav class="navbar navbar-expand-lg navbar-light" style="background-image: linear-gradient(to right, rgb(221, 54, 54),rgb(32, 126, 209));">
                     <div class="container-fluid">
                         <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarText">
                             <ul class="navbar-nav mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/home">Home</a>
+                                    <a class="nav-link" href="/user/{{user_id}}/{{name}}">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/quiz">Scores</a>
+                                    <a class="nav-link" href="/scores/{{ user_id }}/{{name}}">Scores</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/admin_summary">Summary</a>
+                                    <a class="nav-link" href="/user_summary">Summary</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/login">Logout</a>
                                 </li>
                             </ul>
-                            <span class="navbar-text">
+                        </div>
+                         <div>
+                            <span class="nav_bar">
                                 Welcome {{name}}
                             </span>
+                            <form class="d-flex" role="search" method="POST" action="/search/{{name}}">
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_txt" id="search_txt">
+                                <button class="btn btn-outline-primary" type="submit">Search</button>
+                            </form>
                         </div>
                     </div>
                 </nav>
                 {%block content%}
-                    <!--This is form child html-->
+                    <!--This is form child html--> 
                 {%endblock%}
             </div>   
         </div>    

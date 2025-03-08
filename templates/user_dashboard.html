@@ -1,36 +1,44 @@
 {% extends "user_layout.html" %}  <!-- Inherited all nav features -->
 
 {% block content %}
-    <div class="container">
-        <div class="row justify-content-center"> <!-- Center the column -->
-            <div class="col-md-8">
-                <!-- Card container with rounded corners -->
-                <div class="card rounded-panel">
-                    <div class="card-body">
-                        <!-- Bold and centered title for Upcoming Quizzes -->
-                        <h5 class="card-title text-center font-weight-bold">Upcoming Quizzes</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="border-separator">ID</th>
-                                    <th class="border-separator">No. of Questions</th>
-                                    <th class="border-separator">Date</th>
-                                    <th>Duration (HH:MM)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>10</td>
-                                    <td>22/02/2025</td>
-                                    <td>01:30</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="d-flex justify-content-center my-3">
+        <h3 class="main-heading">Upcoming Quizzes</h3>
+    </div>
+    <div class="row justify-content-center"> <!-- Center the column -->
+        <div class="col-md-8">
+            <!-- Card container with rounded corners -->
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Chapter Name</th>
+                                <th class="text-nowrap">Date of Quiz</th>
+                                <th>Duration</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in quizzes %}
+                            {% if quiz.date_of_quiz >= date_today %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ quiz.chapter_name }}</td>
+                                <td>{{ quiz.date_of_quiz }}</td>
+                                <td>{{ quiz.duration }}</td>
+                                <td class="d-flex gap-2">
+                                    <a href="/view_quiz/{{quiz.id}}/{{name}}/{{user_id}}" class="btn btn-primary btn-sm">View</a>
+                                    <a href="/start_quiz/{{ quiz.id }}/{{ name }}/0/{{user_id}}" class="btn btn-success btn-sm">Start Quiz</a>
+
+                                </td>
+                            </tr>
+                            {%endif%}
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <h1 class="center">No Quizzes are available</h1> <!-- Centered message -->
     </div>
 {% endblock %}

@@ -9,3 +9,4 @@
             db.session.commit()        
             return redirect(url_for("admin_dashboard",name=name))
         return render_template("edit_chapter.html",chapter=c,name=name)
+        

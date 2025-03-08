@@ -1,13 +1,16 @@
 {% extends "admin_layout.html" %}  <!-- Inherited all nav features -->
 {% block content %}
 <div class="container">
+    <div class="d-flex justify-content-center my-3">
+        <h3 class="main-heading">Subject Management</h3>
+    </div>
     <!-- Display the message if it exists -->
     {% if msg %}
     <div class="alert alert-warning" role="alert">
         {{ msg }}
     </div>
     {% endif %}
-
+    
     {% if subjects %}
     <div class="row g-3"> <!-- Added spacing between subjects -->
         {% for subject in subjects %}
@@ -15,9 +18,11 @@
             <!-- Subject Card -->
             <div class="card h-100 shadow-sm"> <!-- Ensures equal height and adds shadow -->
                 <div class="card-body w-100"> <!-- Full width inside card -->
-                  <h5 class="card-title text-center">
-                        <a href="/edit_subject/{{subject.id}}/{{name}}">{{ subject.subject_name }}</a>
-                    </h5>
+                    <div class="d-flex justify-content-center my-3">
+                        <h5 class="internal-heading">
+                            <a href="/edit_subject/{{subject.id}}/{{name}}">{{ subject.subject_name }}</a>
+                        </h5> 
+                    </div>                   
                     {% if subject.chapters %}
                     <table class="table table-bordered table-sm">
                         <thead>
@@ -49,7 +54,7 @@
                     <p>Add related chapters</p>
                     {% endif %}
 
-                    <a href="/chapter/{{subject.id}}/{{name}}" class="btn btn-outline-primary w-100">+ Add Chapter</a>
+                    <a href="/chapter/{{subject.id}}/{{name}}" class="btn btn-outline-success">+ Add Chapter</a>
                 </div>
             </div>
             <!-- End of Subject Card -->
@@ -62,6 +67,6 @@
 </div>
 
 <div class="text-center mt-4">
-    <a href="/subject/{{name}}" class="btn btn-primary">+Add Subject</a>
+    <a href="/subject/{{name}}" class="btn btn-info">+Add Subject</a>
 </div>
 {% endblock %}

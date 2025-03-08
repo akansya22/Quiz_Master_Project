@@ -5,9 +5,8 @@
 <div class="container">
     <!-- Page Heading -->
     <div class="d-flex justify-content-center my-3">
-        <h3>Quiz Management</h3>
+        <h3 class="main-heading">Quiz Management</h3>
     </div>
-
     <div class="row g-3"> <!-- Grid layout for quiz boxes -->
         {% for quiz in quizzes %}
         <div class="col-lg-4 col-md-6 col-sm-12"> <!-- Responsive column sizing -->
@@ -42,7 +41,7 @@
                         </tbody>
                     </table>
                     <div class="text-center mt-4">
-                        <a href="/add_question/{{ quiz.id }}/{{ name }}" class="btn btn-success">Add Question</a>
+                        <a href="/add_question/{{ quiz.id }}/{{ name }}" class="btn btn-outline-success">+Add Question</a>
                     </div>                    
                 </div>
             </div>
@@ -52,7 +51,7 @@
 
     <!-- Add New Quiz Button -->
     <div class="text-center mt-4">
-        <a href="{{ url_for('add_quiz',name=name) }}" class="btn btn-success">Add New Quiz</a>
+        <a href="{{ url_for('add_quiz',name=name) }}" class="btn btn-info">+Add New Quiz</a>
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,34 @@
+{% extends "user_layout.html" %}
+{% block content %}
+
+<h2>{{ quiz.quiz_title }}</h2>
+<p>Duration: {{ quiz.duration }} minutes</p>
+
+<form action="/save_answer/{{quiz.id}}/{{name}}/{{question_index}}/{{user.id}}" method="POST">
+    <div class="question">
+        <p><strong>Q{{ question_index|int + 1 }}: {{ question.question_statement }}</strong></p>
+        
+        <div>
+            {% for option in [question.option1, question.option2, question.option3, question.option4] %}
+            <label>
+                <input type="radio" name="answer" value="{{ loop.index0 + 1 }}" required>  
+                {{ option }}
+            </label><br>
+            {% endfor %}        
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between">
+        {% if question_index + 1 < total %}
+            <button type="submit" name="action" value="next" class="btn btn-primary">Save & Next</button>
+        {% endif %}
+        <button type="submit" name="action" value="submit" class="btn btn-success">Submit Quiz</button>
+    </div>
+    
+</form>
+
+
+{% endblock %}
