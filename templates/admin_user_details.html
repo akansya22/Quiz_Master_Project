@@ -1,0 +1,29 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">🧑‍💻 User Details</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Total Quizzes</th>
+                <th>Average Score (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.total_quizzes }}</td>
+                <td>{{ user.average_score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

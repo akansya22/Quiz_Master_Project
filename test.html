@@ -1,12 +1,34 @@
-@app.route("/edit_chapter/<id>/<name>", methods=["GET", "POST"])
-    def edit_chapter(id, name):
-        c = get_chapter(id)  # Fetch the chapter from the database based on the ID
-        if request.method=="POST":
-            title=request.form.get("title")
-            chapter_no=request.form.get("chapter_no")
-            c.title=title
-            c.chapter_no=chapter_no
-            db.session.commit()        
-            return redirect(url_for("admin_dashboard",name=name))
-        return render_template("edit_chapter.html",chapter=c,name=name)
+{% extends "user_layout.html" %}
+{% block content %}
+
+<h2>{{ quiz.quiz_title }}</h2>
+<p>Duration: {{ quiz.duration }} minutes</p>
+
+<form action="/save_answer/{{quiz.id}}/{{name}}/{{question_index}}/{{user.id}}" method="POST">
+    <div class="question">
+        <p><strong>Q{{ question_index|int + 1 }}: {{ question.question_statement }}</strong></p>
         
+        <div>
+            {% for option in [question.option1, question.option2, question.option3, question.option4] %}
+            <label>
+                <input type="radio" name="answer" value="{{ loop.index0 + 1 }}" required>  
+                {{ option }}
+            </label><br>
+            {% endfor %}        
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between">
+        {% if question_index + 1 < total %}
+            <button type="submit" name="action" value="next" class="btn btn-primary">Save & Next</button>
+        {% endif %}
+        <button type="submit" name="action" value="submit" class="btn btn-success">Submit Quiz</button>
+    </div>
+    
+</form>
+
+
+{% endblock %}
