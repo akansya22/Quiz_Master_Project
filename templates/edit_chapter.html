@@ -16,11 +16,10 @@
                         {% endfor %}
                     </select>
                 </div>
-
                 <!-- Fields for New Chapter -->
                 <div class="mb-3">
-                    <label for="new_name" class="form-label">New name</label>
-                    <input type="text" class="form-control" name="new_name" id="new_name" value="{{ chapter.title }}">
+                    <label for="chapter_name" class="form-label">New name</label>
+                    <input type="text" class="form-control" name="chapter_name" id="chapter_name" value="{{ chapter.chapter_name }}">
 
                     <label for="chapter_no" class="form-label">Chapter No.</label>
                     <input type="number" class="form-control" name="chapter_no" id="chapter_no" value="{{ chapter.chapter_no }}">

@@ -4,13 +4,13 @@ from datetime import date, datetime
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
 
 
 @app.route("/")
 def home():
     return render_template("index.html")
-
 
 
 
@@ -28,8 +28,6 @@ def signin():
             return render_template("login.html",msg1="Invalide User Credentials...")
         
     return render_template("login.html",msg="")
-
-
 
 
 
@@ -61,13 +59,19 @@ def signup():
 
 
 
-# Common route for adminr dashboard
+
+
+
+
+
+
+####################----->>>-----***START***---------------Common routes for "ADMIN DASHBOARD"--------------#####################
+
 @app.route("/admin/<name>")
 def admin_dashboard(name):
     subjects=get_subjects()
 
     return render_template("admin_dashboard.html",name=name,subjects=subjects)
-
 
 
 
@@ -86,7 +90,6 @@ def add_subject(name):
     
     return render_template("add_subject.html",name=name)
  
-
 
 
 @app.route("/edit_subject/<id>/<name>",methods=["GET","POST"])
@@ -109,7 +112,6 @@ def edit_subject(id,name):
 
 
 
-
 @app.route("/delete_subject/<id>/<name>",methods=["GET","POST"])
 def delete_subject(id,name):
     s=get_subject(id)
@@ -117,7 +119,6 @@ def delete_subject(id,name):
     db.session.commit()
 
     return redirect(url_for("admin_dashboard",name=name))
-
 
 
 
@@ -136,7 +137,6 @@ def add_chapter(subject_id,name):
 
 
 
-
 @app.route("/edit_chapter/<id>/<name>",methods=["GET","POST"])
 def edit_chapter(id,name):
     c = get_chapter(id)
@@ -144,16 +144,15 @@ def edit_chapter(id,name):
     chapters = Chapter.query.filter_by(subject_id=subject_id).all()
 
     if request.method=="POST":
-        new_name=request.form.get("new_name")
+        new_name=request.form.get("chapter_name")
         chapter_no=request.form.get("chapter_no")
-        c.new_name=new_name
+        c.chapter_name=new_name
         c.chapter_no=chapter_no
         db.session.commit()
 
         return redirect(url_for("admin_dashboard",name=name))
     
     return render_template("edit_chapter.html",chapter=c,name=name,chapters=chapters)
-
 
 
 
@@ -167,15 +166,11 @@ def delete_chapter(id,name):
 
 
 
-
-
 @app.route('/quiz_management/<name>')
 def quiz_management(name):
     quizzes = Quiz.query.all()
 
     return render_template("quiz_management.html",name=name,quizzes=quizzes)
-
-
 
 
 
@@ -209,7 +204,6 @@ def add_quiz(name):
 
 
 
-
 @app.route("/edit_quiz/<quiz_id>/<name>",methods=["GET","POST"])
 def edit_quiz(quiz_id, name):
     quiz = Quiz.query.get_or_404(quiz_id)
@@ -239,8 +233,6 @@ def edit_quiz(quiz_id, name):
 
 
 
-
-
 @app.route('/delete_quiz/<id>/<name>',methods=["GET","POST"])
 def delete_quiz(id,name):
     qz = get_quiz(id)
@@ -248,8 +240,6 @@ def delete_quiz(id,name):
     db.session.commit()
 
     return redirect(url_for("quiz_management",name=name))
-
-
 
 
 
@@ -275,7 +265,6 @@ def add_question(id,name):
         return redirect(url_for("quiz_management",name=name))
 
     return render_template("add_question.html",name=name,quiz=qz, msg="")
-
 
 
 
@@ -307,8 +296,6 @@ def edit_question(id,name):
 
 
 
-
-
 @app.route("/delete_question/<id>/<name>",methods=["GET"])
 def delete_question(id,name):
     que=get_question(id)
@@ -327,7 +314,6 @@ def admin_user_details(name):
 
 
 
-
 @app.route("/admin_summary/<name>")
 def admin_summary(name):
     plot = get_admin_summary()
@@ -337,6 +323,25 @@ def admin_summary(name):
 
 
 
+@app.route("/search/<name>", methods=["GET", "POST"])
+def search(name):
+    if request.method == "POST":
+        search_txt = request.form.get("search_txt")
+        by_subject = search_by_subject(search_txt)
+        by_quiz = search_by_quiz(search_txt)
+        by_user = search_by_user(search_txt)  # New function for user search
+
+        if by_subject:
+            return render_template("admin_dashboard.html", name=name, subjects=by_subject)
+        elif by_quiz:
+            return render_template("quiz_management.html", name=name, quizzes=by_quiz)
+        elif by_user:
+            return render_template("admin_user_details.html", name=name, users=by_user)  # New template for users
+        else:
+            return render_template("admin_dashboard.html", name=name, msg="No matching results found.")
+    return redirect(url_for("admin_dashboard", name=name))
+
+####################----->>>-----***END***---------------Common routes for "ADMIN DASHBOARD"--------------#####################
 
 
 
@@ -347,17 +352,8 @@ def admin_summary(name):
 
 
 
+####################----->>>-----***START***---------------Common routes for "USER DASHBOARD"--------------#####################
 
-
-
-
-
-
-
-
-
-
-# Common route for user dashboard
 @app.route("/user/<user_id>/<name>")
 def user_dashboard(user_id,name):
     quizzes=get_quizzes()
@@ -367,13 +363,11 @@ def user_dashboard(user_id,name):
 
 
 
-
 @app.route('/view_quiz/<quiz_id>/<name>/<user_id>')
 def view_quiz(quiz_id,name,user_id):
     quiz=get_quiz(quiz_id) 
 
     return render_template("view_quiz.html",quiz=quiz,name=name,user_id=user_id)
-
 
 
 
@@ -389,34 +383,40 @@ def start_quiz(quiz_id,name,question_index,user_id):
 
 
 
-
-@app.route("/save_answer/<quiz_id>/<name>/<int:question_index>/<user_id>",methods=["POST"])
-def save_answer(quiz_id,name,question_index,user_id):
+@app.route("/save_answer/<quiz_id>/<name>/<int:question_index>/<user_id>", methods=["POST"])
+def save_answer(quiz_id, name, question_index, user_id):
     selected_answer = request.form.get("answer")
     if "quiz_answers" not in session:
         session["quiz_answers"] = {}
+    
     session["quiz_answers"][f"quiz_{quiz_id}_q{question_index}"] = int(selected_answer)
+    session.modified = True  # Ensure session updates are saved
+
+    print("Session Data:", session["quiz_answers"])  # Debug print
+
     total_questions = len(get_questions(quiz_id))
     if question_index + 1 < total_questions:
-        return redirect(url_for("start_quiz",quiz_id=quiz_id,name=name,question_index=question_index + 1,user_id=user_id))
+        return redirect(url_for("start_quiz", quiz_id=quiz_id, name=name, question_index=question_index + 1, user_id=user_id))
     else:
-        return redirect(url_for("submit_quiz",quiz_id=quiz_id,name=name,user_id=user_id))
+        return redirect(url_for("submit_quiz", quiz_id=quiz_id, name=name, user_id=user_id))
 
-  
 
 
 @app.route("/submit_quiz/<quiz_id>/<name>/<user_id>")
 def submit_quiz(quiz_id, name, user_id):
     user = get_user(user_id)
     answers = session.get("quiz_answers", {})
-    total_questions = len(get_questions(quiz_id))
+    print("Stored Answers in Session:", answers)  # Debug print
+
+    questions = get_questions(quiz_id)
+    total_questions = len(questions)
     correct_answers = 0
 
-    for index in range(total_questions):
-        question = get_questions(quiz_id)[index]
-        correct_option = question.correct_option
+    for index, question in enumerate(questions):
+        correct_option = int(question.correct_option)
         user_answer = answers.get(f"quiz_{quiz_id}_q{index}")
-        if user_answer == correct_option:
+        
+        if user_answer is not None and int(user_answer) == correct_option:
             correct_answers += 1
 
     percentage = (correct_answers / total_questions) * 100
@@ -431,14 +431,28 @@ def submit_quiz(quiz_id, name, user_id):
         existing_score.pass_fail_status = pass_fail_status
         existing_score.time_stamp = datetime.now()
     else:
-        new_score = Score(quiz_id=quiz_id,user_id=user.id,total_scored=correct_answers,total_possible_score=total_questions,percentage_scored=percentage,pass_fail_status=pass_fail_status)
+        new_score = Score(
+            quiz_id=quiz_id, 
+            user_id=user.id,
+            total_scored=correct_answers,
+            total_possible_score=total_questions,
+            percentage_scored=percentage,
+            pass_fail_status=pass_fail_status
+        )
         db.session.add(new_score)
 
     db.session.commit()
-    session.pop("quiz_answers", None)  # Clear the session after submission
+    
+    # Clear session after database updates
+    session.pop("quiz_answers", None)
 
-    return render_template("quiz_result.html", name=name, user=user, score=new_score if not existing_score else existing_score, user_id=user_id)
-
+    return render_template(
+        "quiz_result.html", 
+        name=name, 
+        user=user, 
+        score=new_score if not existing_score else existing_score, 
+        user_id=user_id
+    )
 
 
 
@@ -450,13 +464,43 @@ def user_scores(user_id,name):
 
 
 
-
 @app.route("/user_summary/<user_id>/<name>")
 def user_summary(user_id,name):
     plot = get_user_summary(user_id)
     plot.savefig("./static/images/user_summary.jpeg")
     plot.clf()
     return render_template("user_summary.html",name=name,user_id=user_id)
+
+
+
+@app.route("/user_search/<name>/<user_id>", methods=["POST"])
+def user_search(name, user_id):
+    quizzes = get_quizzes()  # ✅ Correctly fetching quizzes
+    search_txt = request.form.get("search_txt").strip().lower()
+
+    # ✅ Use dot notation to access object properties
+    filtered_quizzes = [
+        quiz for quiz in quizzes
+        if search_txt in quiz.chapter_name.lower() or search_txt in quiz.quiz_title.lower()
+    ]
+
+    # Pass the filtered data to the template
+    return render_template(
+        "user_dashboard.html",
+        name=name,
+        user_id=user_id,
+        quizzes=filtered_quizzes,
+        date_today=datetime.now().date()
+    )
+
+####################----->>>-----***END***---------------Common routes for "USER DASHBOARD"--------------#####################
+
+
+
+
+
+
+
 
 
 
@@ -572,3 +616,53 @@ def get_admin_summary():
     plt.tight_layout(pad=2)
     return plt
 
+
+def search_by_subject(search_txt):
+    subjects=Subject.query.filter(Subject.subject_name.ilike(f"%{search_txt}%")).all()
+    return subjects
+
+
+def search_by_quiz(search_txt):
+    quizzes = Quiz.query.filter(Quiz.chapter.has(Chapter.chapter_name.ilike(f"%{search_txt}%"))).all()
+    
+    # Collect chapters grouped by subject
+    subject_chapter_map = defaultdict(list)
+    
+    for quiz in quizzes:
+        subject = quiz.chapter.subject
+        subject_chapter_map[subject].append(quiz.chapter)
+
+    # Create Subject-like objects to match your template logic
+    search_results = []
+    for subject, chapters in subject_chapter_map.items():
+        search_results.append({
+            "id": subject.id,
+            "subject_name": subject.subject_name,
+            "chapters": chapters
+        })
+
+    return search_results
+
+
+def search_by_user(search_txt):
+    users = User_Info.query.filter(
+        User_Info.full_name.ilike(f"%{search_txt}%") |
+        User_Info.email.ilike(f"%{search_txt}%")
+    ).all()
+
+    # Create user-like objects for your table
+    search_results = [
+        {
+            "name": user.full_name,
+            "email": user.email,
+            "total_quizzes": len(user.scores),
+            "average_score": round(sum(score.total_scored for score in user.scores) / len(user.scores), 2)
+            if user.scores else 0
+        }
+        for user in users
+    ]
+
+    return search_results
+
+
+##########################-------->>>>>>---------"HAPPY ENDING"--------<<<<<<--------##########################

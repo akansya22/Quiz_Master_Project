@@ -31,10 +31,18 @@
                             <span class="nav_bar">
                                 Welcome {{name}}
                             </span>
-                            <form class="d-flex" role="search" method="GET" action="/user_search/{{name}}">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" id="search_txt">
-                                <button class="btn btn-outline-primary" type="submit">Search</button>
+                            <form method="POST" action="/user_search/{{ name }}/{{ user_id }}" class="mb-3">
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        name="search_txt" 
+                                        class="form-control" 
+                                        placeholder="Search subjects or quizzes..." 
+                                        required>
+                                    <button type="submit" class="btn btn-info">Search</button>
+                                </div>
                             </form>
+                            
                         </div>
                     </div>
                 </nav>
