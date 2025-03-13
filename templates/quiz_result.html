@@ -1,8 +1,6 @@
 {% extends "user_layout.html" %}
 {% block content %}
-
-<h2>Quiz Result</h2>
-
+<h2 class="center">Quiz Result</h2>
 <p>Total Score: {{ score.total_scored }} / {{ score.total_possible_score }}</p>
 <p>Percentage: {{ score.percentage_scored }}%</p>
 <p>Status: <strong>{{ score.pass_fail_status }}</strong></p>

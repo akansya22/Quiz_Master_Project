@@ -26,7 +26,6 @@ def signin():
             return redirect(url_for("user_dashboard",name=email,user_id=usr.id))
         else:
             return render_template("login.html",msg1="Invalide User Credentials...")
-        
     return render_template("login.html",msg="")
 
 
@@ -51,15 +50,8 @@ def signup():
         new_user=User_Info(email=email,password=pwd,full_name=full_name,qualification=qualification,dob=dob)
         db.session.add(new_user)
         db.session.commit()
-
         return render_template("login.html",msg2="Registration Successful, try logging in now.")
-    
     return render_template("signup.html",msg="")
-
-
-
-
-
 
 
 
@@ -70,7 +62,6 @@ def signup():
 @app.route("/admin/<name>")
 def admin_dashboard(name):
     subjects=get_subjects()
-
     return render_template("admin_dashboard.html",name=name,subjects=subjects)
 
 
@@ -85,9 +76,7 @@ def add_subject(name):
         new_subject=Subject(subject_name=sname,code=code,credit=credit,description=description)
         db.session.add(new_subject)
         db.session.commit()
-
         return redirect(url_for("admin_dashboard",name=name))
-    
     return render_template("add_subject.html",name=name)
  
 
@@ -105,9 +94,7 @@ def edit_subject(id,name):
         s.credit=credit
         s.description=description
         db.session.commit()
-
         return redirect(url_for("admin_dashboard",name=name))
-    
     return render_template("edit_subject.html",subject=s,name=name)
 
 
@@ -117,7 +104,6 @@ def delete_subject(id,name):
     s=get_subject(id)
     db.session.delete(s)
     db.session.commit()
-
     return redirect(url_for("admin_dashboard",name=name))
 
 
@@ -130,9 +116,7 @@ def add_chapter(subject_id,name):
         new_chapter=Chapter(chapter_name=chapter_name,chapter_no=chapter_no,subject_id=subject_id)
         db.session.add(new_chapter)
         db.session.commit()
-
         return redirect(url_for("admin_dashboard",name=name))
-    
     return render_template("add_chapter.html",subject_id=subject_id,name=name)
 
 
@@ -142,16 +126,13 @@ def edit_chapter(id,name):
     c = get_chapter(id)
     subject_id = c.subject_id
     chapters = Chapter.query.filter_by(subject_id=subject_id).all()
-
     if request.method=="POST":
         new_name=request.form.get("chapter_name")
         chapter_no=request.form.get("chapter_no")
         c.chapter_name=new_name
         c.chapter_no=chapter_no
         db.session.commit()
-
         return redirect(url_for("admin_dashboard",name=name))
-    
     return render_template("edit_chapter.html",chapter=c,name=name,chapters=chapters)
 
 
@@ -161,7 +142,6 @@ def delete_chapter(id,name):
     c=get_chapter(id)
     db.session.delete(c)
     db.session.commit()
-
     return redirect(url_for("admin_dashboard",name=name))
 
 
@@ -169,7 +149,6 @@ def delete_chapter(id,name):
 @app.route('/quiz_management/<name>')
 def quiz_management(name):
     quizzes = Quiz.query.all()
-
     return render_template("quiz_management.html",name=name,quizzes=quizzes)
 
 
@@ -179,27 +158,21 @@ def add_quiz(name):
     if request.method == "POST":
         chapter_id = request.form.get("chapter_id")
         chapter = Chapter.query.filter_by(id=chapter_id).first()
-
         if chapter:
             chapter_name = chapter.chapter_name
         else:
             chapter_name = None
-
         quiz_title = request.form.get("quiz_title")
         duration = request.form.get("duration")
         date_of_quiz = request.form.get("date_of_quiz")
         date_of_quiz = datetime.strptime(date_of_quiz, "%Y-%m-%d").date()
         total_questions = request.form.get("total_questions")
-
         new_quiz = Quiz(chapter_id=chapter_id,chapter_name=chapter_name,quiz_title=quiz_title,duration=duration,date_of_quiz=date_of_quiz,total_questions=total_questions)
-
         db.session.add(new_quiz)
         db.session.commit()
         return redirect(url_for("quiz_management",name=name))
-    
     chapters_with_quizzes = {quiz.chapter_id for quiz in Quiz.query.all()}
     chapters = Chapter.query.filter(~Chapter.id.in_(chapters_with_quizzes)).all()
-
     return render_template("add_quiz.html",name=name,chapters=chapters)
 
 
@@ -207,16 +180,13 @@ def add_quiz(name):
 @app.route("/edit_quiz/<quiz_id>/<name>",methods=["GET","POST"])
 def edit_quiz(quiz_id, name):
     quiz = Quiz.query.get_or_404(quiz_id)
-
     if request.method == "POST":
         chapter_id = request.form.get("chapter_id")
         chapter = Chapter.query.filter_by(id=chapter_id).first()
-
         if chapter:
             chapter_name = chapter.chapter_name
         else:
             chapter_name = None
-
         quiz.chapter_id = chapter_id
         quiz.chapter_name = chapter_name
         quiz.quiz_title = request.form.get("quiz_title")
@@ -225,10 +195,8 @@ def edit_quiz(quiz_id, name):
         quiz.total_questions = request.form.get("total_questions")
         db.session.commit()
         return redirect(url_for("quiz_management",name=name))
-
     chapters_with_quizzes = {q.chapter_id for q in Quiz.query.all()} - {quiz.chapter_id}
     chapters = Chapter.query.filter(~Chapter.id.in_(chapters_with_quizzes)).all()
-
     return render_template("edit_quiz.html",name=name,quiz=quiz,chapters=chapters)
 
 
@@ -238,7 +206,6 @@ def delete_quiz(id,name):
     qz = get_quiz(id)
     db.session.delete(qz)
     db.session.commit()
-
     return redirect(url_for("quiz_management",name=name))
 
 
@@ -246,7 +213,6 @@ def delete_quiz(id,name):
 @app.route("/add_question/<id>/<name>",methods=["GET","POST"])
 def add_question(id,name):
     qz = get_quiz(id)
-
     if request.method == "POST":
         question_statement = request.form.get("question_statement")
         option1 = request.form.get("option1")
@@ -254,16 +220,12 @@ def add_question(id,name):
         option3 = request.form.get("option3")
         option4 = request.form.get("option4")
         correct_option = request.form.get("correct_option")
-
         if not question_statement or not option1 or not option2 or not option3 or not option4 or not correct_option:
             return render_template("add_question.html", name=name, quiz=qz, msg="All fields are required!")
-        
         new_question = Question(quiz_id=id,question_statement=question_statement,option1=option1,option2=option2,option3=option3,option4=option4,correct_option=correct_option)
         db.session.add(new_question)
         db.session.commit()
-
         return redirect(url_for("quiz_management",name=name))
-
     return render_template("add_question.html",name=name,quiz=qz, msg="")
 
 
@@ -278,10 +240,8 @@ def edit_question(id,name):
         option3 = request.form.get("option3")
         option4 = request.form.get("option4")
         correct_option = request.form.get("correct_option")
-
         if not question_statement or not option1 or not option2 or not option3 or not option4 or not correct_option:
             return render_template("edit_question.html",name=name,question=que,msg="All fields are required!")
-
         que.question_statement = question_statement
         que.option1 = option1
         que.option2 = option2
@@ -289,9 +249,7 @@ def edit_question(id,name):
         que.option4 = option4
         que.correct_option = correct_option
         db.session.commit()
-
         return redirect(url_for("quiz_management",name=name))
-
     return render_template("edit_question.html",name=name,question=que,msg="")
 
 
@@ -301,9 +259,7 @@ def delete_question(id,name):
     que=get_question(id)
     db.session.delete(que)
     db.session.commit()
-
     return redirect(url_for("quiz_management",name=name))
-
 
 
 
@@ -329,24 +285,18 @@ def search(name):
         search_txt = request.form.get("search_txt")
         by_subject = search_by_subject(search_txt)
         by_quiz = search_by_quiz(search_txt)
-        by_user = search_by_user(search_txt)  # New function for user search
-
+        by_user = search_by_user(search_txt)
         if by_subject:
             return render_template("admin_dashboard.html", name=name, subjects=by_subject)
         elif by_quiz:
             return render_template("quiz_management.html", name=name, quizzes=by_quiz)
         elif by_user:
-            return render_template("admin_user_details.html", name=name, users=by_user)  # New template for users
+            return render_template("admin_user_details.html", name=name, users=by_user)
         else:
             return render_template("admin_dashboard.html", name=name, msg="No matching results found.")
     return redirect(url_for("admin_dashboard", name=name))
 
 ####################----->>>-----***END***---------------Common routes for "ADMIN DASHBOARD"--------------#####################
-
-
-
-
-
 
 
 
@@ -358,7 +308,6 @@ def search(name):
 def user_dashboard(user_id,name):
     quizzes=get_quizzes()
     date_today=date.today()
-
     return render_template("user_dashboard.html",name=name,quizzes=quizzes,date_today=date_today,user_id=user_id)
 
 
@@ -366,7 +315,6 @@ def user_dashboard(user_id,name):
 @app.route('/view_quiz/<quiz_id>/<name>/<user_id>')
 def view_quiz(quiz_id,name,user_id):
     quiz=get_quiz(quiz_id) 
-
     return render_template("view_quiz.html",quiz=quiz,name=name,user_id=user_id)
 
 
@@ -378,7 +326,6 @@ def start_quiz(quiz_id,name,question_index,user_id):
     total_questions = len(questions)
     question = questions[question_index]
     user = get_user(user_id)
-
     return render_template("start_quiz.html",quiz=quiz,question=question,name=name,question_index=question_index,total=total_questions,user=user,user_id=user_id)
 
 
@@ -388,12 +335,8 @@ def save_answer(quiz_id, name, question_index, user_id):
     selected_answer = request.form.get("answer")
     if "quiz_answers" not in session:
         session["quiz_answers"] = {}
-    
     session["quiz_answers"][f"quiz_{quiz_id}_q{question_index}"] = int(selected_answer)
-    session.modified = True  # Ensure session updates are saved
-
-    print("Session Data:", session["quiz_answers"])  # Debug print
-
+    session.modified = True
     total_questions = len(get_questions(quiz_id))
     if question_index + 1 < total_questions:
         return redirect(url_for("start_quiz", quiz_id=quiz_id, name=name, question_index=question_index + 1, user_id=user_id))
@@ -406,22 +349,16 @@ def save_answer(quiz_id, name, question_index, user_id):
 def submit_quiz(quiz_id, name, user_id):
     user = get_user(user_id)
     answers = session.get("quiz_answers", {})
-    print("Stored Answers in Session:", answers)  # Debug print
-
     questions = get_questions(quiz_id)
     total_questions = len(questions)
     correct_answers = 0
-
     for index, question in enumerate(questions):
         correct_option = int(question.correct_option)
         user_answer = answers.get(f"quiz_{quiz_id}_q{index}")
-        
         if user_answer is not None and int(user_answer) == correct_option:
             correct_answers += 1
-
     percentage = (correct_answers / total_questions) * 100
     pass_fail_status = "Pass" if percentage >= 40 else "Fail"
-
     existing_score = Score.query.filter_by(quiz_id=quiz_id, user_id=user.id).first()
 
     if existing_score:
@@ -432,34 +369,17 @@ def submit_quiz(quiz_id, name, user_id):
         existing_score.time_stamp = datetime.now()
     else:
         new_score = Score(
-            quiz_id=quiz_id, 
-            user_id=user.id,
-            total_scored=correct_answers,
-            total_possible_score=total_questions,
-            percentage_scored=percentage,
-            pass_fail_status=pass_fail_status
-        )
+            quiz_id=quiz_id,user_id=user.id,total_scored=correct_answers,total_possible_score=total_questions,percentage_scored=percentage,pass_fail_status=pass_fail_status)
         db.session.add(new_score)
-
     db.session.commit()
-    
-    # Clear session after database updates
     session.pop("quiz_answers", None)
-
-    return render_template(
-        "quiz_result.html", 
-        name=name, 
-        user=user, 
-        score=new_score if not existing_score else existing_score, 
-        user_id=user_id
-    )
+    return render_template("quiz_result.html",name=name,user=user,score=new_score if not existing_score else existing_score,user_id=user_id)
 
 
 
 @app.route("/scores/<user_id>/<name>")
 def user_scores(user_id,name):
     scores=get_scores(user_id)
-
     return render_template('scores.html',scores=scores,name=name,user_id=user_id)
 
 
@@ -475,33 +395,15 @@ def user_summary(user_id,name):
 
 @app.route("/user_search/<name>/<user_id>", methods=["POST"])
 def user_search(name, user_id):
-    quizzes = get_quizzes()  # ✅ Correctly fetching quizzes
+    quizzes = get_quizzes()
     search_txt = request.form.get("search_txt").strip().lower()
-
-    # ✅ Use dot notation to access object properties
     filtered_quizzes = [
         quiz for quiz in quizzes
         if search_txt in quiz.chapter_name.lower() or search_txt in quiz.quiz_title.lower()
     ]
-
-    # Pass the filtered data to the template
-    return render_template(
-        "user_dashboard.html",
-        name=name,
-        user_id=user_id,
-        quizzes=filtered_quizzes,
-        date_today=datetime.now().date()
-    )
+    return render_template("user_dashboard.html",name=name,user_id=user_id,quizzes=filtered_quizzes,date_today=datetime.now().date())
 
 ####################----->>>-----***END***---------------Common routes for "USER DASHBOARD"--------------#####################
-
-
-
-
-
-
-
-
 
 
 
@@ -565,7 +467,6 @@ def get_scores(user_id):
 def get_user_details():
     users = User_Info.query.all()
     user_data = []
-
     for user in users:
         scores = get_scores(user.id)
         total_quizzes = len(scores)
@@ -578,41 +479,36 @@ def get_user_summary(user_id):
     scores = get_scores(user_id)
     summary = {}
     for score in scores:
-        chapter_name = score.quiz.chapter.chapter_name
-        summary[chapter_name] = score.percentage_scored
+        quiz_title = score.quiz.quiz_title
+        summary[quiz_title] = score.percentage_scored
     x_names = list(summary.keys())
     y_percentages = list(summary.values())
     plt.figure(figsize=(20, 12))
     plt.bar(x_names, y_percentages, color="blue", width=0.5)
-    plt.xlabel("Chapters", fontsize=40, fontweight='bold')
+    plt.xlabel("Chapters", fontsize=35, fontweight='bold')
     plt.ylabel("Percentage (%)", fontsize=30, fontweight='bold')
-    plt.xticks(rotation=30, ha="right", fontsize=15)
-    plt.yticks(fontsize=15)
-
+    plt.xticks(rotation=30, ha="right", fontsize=25)
+    plt.yticks(fontsize=25)
     plt.tight_layout(pad=2)
     return plt
 
 
 def get_admin_summary():
     results = db.session.query(
-        Chapter.chapter_name,
+        Quiz.quiz_title, 
         func.max(Score.percentage_scored).label("top_score")
-    ).join(Quiz, Quiz.id == Score.quiz_id) \
-     .join(Chapter, Chapter.id == Quiz.chapter_id) \
-     .group_by(Chapter.chapter_name) \
+    ).join(Score, Score.quiz_id == Quiz.id) \
+     .group_by(Quiz.quiz_title) \
      .all()
-
-    summary = {chapter: score for chapter, score in results}
+    summary = {quiz_title: score for quiz_title, score in results}
     x_names = list(summary.keys())
     y_scores = list(summary.values())
-
     plt.figure(figsize=(20, 12))
     plt.bar(x_names, y_scores, color="green", width=0.5)
-    plt.xlabel("Chapters", fontsize=40, fontweight='bold')
+    plt.xlabel("Quizzes", fontsize=40, fontweight='bold')
     plt.ylabel("Top Scores (%)", fontsize=30, fontweight='bold')
     plt.xticks(rotation=30, ha="right", fontsize=20)
     plt.yticks(fontsize=20)
-
     plt.tight_layout(pad=2)
     return plt
 
@@ -621,27 +517,8 @@ def search_by_subject(search_txt):
     subjects=Subject.query.filter(Subject.subject_name.ilike(f"%{search_txt}%")).all()
     return subjects
 
-
 def search_by_quiz(search_txt):
-    quizzes = Quiz.query.filter(Quiz.chapter.has(Chapter.chapter_name.ilike(f"%{search_txt}%"))).all()
-    
-    # Collect chapters grouped by subject
-    subject_chapter_map = defaultdict(list)
-    
-    for quiz in quizzes:
-        subject = quiz.chapter.subject
-        subject_chapter_map[subject].append(quiz.chapter)
-
-    # Create Subject-like objects to match your template logic
-    search_results = []
-    for subject, chapters in subject_chapter_map.items():
-        search_results.append({
-            "id": subject.id,
-            "subject_name": subject.subject_name,
-            "chapters": chapters
-        })
-
-    return search_results
+    return Quiz.query.join(Chapter).filter(Chapter.chapter_name.ilike(f"%{search_txt}%")).all()
 
 
 def search_by_user(search_txt):
@@ -649,8 +526,6 @@ def search_by_user(search_txt):
         User_Info.full_name.ilike(f"%{search_txt}%") |
         User_Info.email.ilike(f"%{search_txt}%")
     ).all()
-
-    # Create user-like objects for your table
     search_results = [
         {
             "name": user.full_name,
@@ -661,8 +536,6 @@ def search_by_user(search_txt):
         }
         for user in users
     ]
-
     return search_results
 
-
-##########################-------->>>>>>---------"HAPPY ENDING"--------<<<<<<--------##########################
+##########################-------->>>>>>---------" Code Successfully Completed "--------<<<<<<--------##########################

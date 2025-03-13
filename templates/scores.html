@@ -1,13 +1,11 @@
 {% extends "user_layout.html" %}
 {% block content %}
-
 <h2 class="center">Your Quiz Scores</h2>
-
 {% if scores %}
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Quiz ID</th>
+                <th>Chapter Nmae</th>
                 <th>Date</th>
                 <th>Total Score</th>
                 <th>Percentage</th>
@@ -17,7 +15,7 @@
         <tbody>
             {% for score in scores %}
             <tr>
-                <td>{{ score.quiz_id }}</td>
+                <td>{{ score.quiz.chapter_name }}</td>
                 <td>{{ score.time_stamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                 <td>{{ score.total_scored }} / {{ score.total_possible_score }}</td>
                 <td>{{ score.percentage_scored }}%</td>
@@ -29,9 +27,5 @@
 {% else %}
     <p>No quiz results found.</p>
 {% endif %}
-
 <a href="/user/{{user_id}}/{{name}}" class="btn btn-primary">Back to Dashboard</a>
-
-
-
 {% endblock %}

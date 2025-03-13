@@ -1,12 +1,9 @@
 {% extends "admin_layout.html" %}
-
 {% block content %}
     {% if chapter %}
         <div class="center"><h3>Edit Chapter</h3></div>
         <form action="/edit_chapter/{{ chapter.id }}/{{ name }}" method="POST">
             <div class="input_form">
-                
-                <!-- Dropdown for Existing Chapter -->
                 <div class="mb-3">
                     <label for="existing_chapter_select" class="form-label">Show Existing Chapter</label>
                     <select name="existing_chapter" class="form-control" id="existing_chapter_select">
@@ -16,15 +13,12 @@
                         {% endfor %}
                     </select>
                 </div>
-                <!-- Fields for New Chapter -->
                 <div class="mb-3">
                     <label for="chapter_name" class="form-label">New name</label>
                     <input type="text" class="form-control" name="chapter_name" id="chapter_name" value="{{ chapter.chapter_name }}">
-
                     <label for="chapter_no" class="form-label">Chapter No.</label>
                     <input type="number" class="form-control" name="chapter_no" id="chapter_no" value="{{ chapter.chapter_no }}">
                 </div>
-
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a href="/admin/{{ name }}" type="button" class="btn btn-primary">Cancel</a>

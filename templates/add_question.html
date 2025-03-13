@@ -1,41 +1,33 @@
-{% extends "admin_layout.html" %}  <!-- Inherits admin navigation -->
+{% extends "admin_layout.html" %}
 {% block content %}
-
 <div class="center">
     <h3>Add Question for Quiz: {{ quiz.quiz_title }}</h3>
 </div>
-
 <form action="/add_question/{{ quiz.id }}/{{ name }}" method="POST">
     <div class="input_form">
         {% if msg %}
             <div class="alert alert-danger">{{ msg }}</div>
         {% endif %}
-
         <div class="mb-3">
             <label for="question_statement" class="form-label">Question Statement</label>
             <input type="text" class="form-control" name="question_statement" id="question_statement" required>
         </div>
-
         <div class="mb-3">
             <label for="option1" class="form-label">Option 1</label>
             <input type="text" class="form-control" name="option1" id="option1" required>
         </div>
-
         <div class="mb-3">
             <label for="option2" class="form-label">Option 2</label>
             <input type="text" class="form-control" name="option2" id="option2" required>
         </div>
-
         <div class="mb-3">
             <label for="option3" class="form-label">Option 3</label>
             <input type="text" class="form-control" name="option3" id="option3" required>
         </div>
-
         <div class="mb-3">
             <label for="option4" class="form-label">Option 4</label>
             <input type="text" class="form-control" name="option4" id="option4" required>
         </div>
-
         <div class="mb-3">
             <label for="correct_option" class="form-label">Correct Answer</label>
             <select class="form-control" name="correct_option" id="correct_option" required>
@@ -46,12 +38,10 @@
                 <option value="4">Option 4</option>
             </select>
         </div>
-
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Save Question</button>
             <a href="/quiz_management/{{ name }}" class="btn btn-danger">Cancel</a>
         </div>
     </div>
 </form>
-
 {% endblock %}

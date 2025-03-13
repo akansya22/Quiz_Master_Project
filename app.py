@@ -8,7 +8,7 @@ app = None
 def setup_app():
     global app
     app = Flask(__name__)
-    app.secret_key = "your_secret_key"  # Required for session handling
+    app.secret_key = "your_secret_key"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///quiz_info.sqlite3"
     db.init_app(app)
     api.init_app(app)
