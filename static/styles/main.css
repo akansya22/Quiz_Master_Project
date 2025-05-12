@@ -16,7 +16,7 @@
     width: 80%;
     margin: auto;
     height: auto;
-    border: 1px dashed black;
+    border: 1px solid black;
     border-radius: 10px;
     padding: 15px;
 }
@@ -126,4 +126,24 @@ th:last-child, td:last-child {
     -webkit-text-fill-color: transparent;
 
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Softer shadow */
+}
+
+
+
+
+#bgVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+
+.center_1 {
+    text-align: center;
+    color: rgb(10, 239, 235);
+    margin-bottom: 15px;
 }
